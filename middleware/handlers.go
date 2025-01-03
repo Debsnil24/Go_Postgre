@@ -12,15 +12,16 @@ import (
 	"github.com/Debsnil24/Go_Postgre.git/models"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
-type response struct{
-	ID int `json:"id,omitempty"`
+type response struct {
+	ID      int    `json:"id,omitempty"`
 	Message string `json:"message,omitempty"`
 }
 
 func CreateConnection() *sql.DB {
-	err := godotenv.Load(".env")
+	err := godotenv.Load("C:/Users/debsn/Desktop/CollegeStuff/Programs/Go/Go_Postgre/.env")
 	if err != nil {
 		log.Fatal("Error loading .env File")
 	}
@@ -44,13 +45,13 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&stock)
 	if err != nil {
-		log.Fatalf("Unable to Decode the Request Body. %v", err)
+		log.Fatalf("Unable to Decode the Request Body. %v\n", err)
 	}
 
 	insertID := insertStock(stock)
 
 	res := response{
-		ID: insertID,
+		ID:      insertID,
 		Message: "Stock Created Successfully",
 	}
 
@@ -62,12 +63,12 @@ func GetStock(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		log.Fatalf("Unable to convert string to int. %v", err)
+		log.Fatalf("Unable to convert string to int. %v\n", err)
 	}
 
 	stock, err := getStock(int64(id))
 	if err != nil {
-		log.Fatalf("Unable to get Stock. %v", err)
+		log.Fatalf("Unable to get Stock. %v\n", err)
 	}
 
 	json.NewEncoder(w).Encode(stock)
@@ -76,9 +77,9 @@ func GetStock(w http.ResponseWriter, r *http.Request) {
 func GetAllStock(w http.ResponseWriter, r *http.Request) {
 	stocks, err := getAllStocks()
 	if err != nil {
-		log.Fatalf("Unable to get stocks %v", err)
+		log.Fatalf("Unable to get stocks %v\n", err)
 	}
-	
+
 	json.NewEncoder(w).Encode(stocks)
 }
 
@@ -87,19 +88,19 @@ func UpdateStock(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		log.Fatalf("Unable to convert string to int. %v", err)
+		log.Fatalf("Unable to convert string to int. %v\n", err)
 	}
 
 	var stock models.Stock
 
-	err = json.NewEncoder(w).Encode(&stock)
+	err = json.NewDecoder(r.Body).Decode(&stock)
 	if err != nil {
-		log.Fatalf("Unable to Decode request body. %v", err)
+		log.Fatalf("Unable to Decode request body. %v\n", err)
 	}
 	updateRows := updateStock(int64(id), stock)
 	msg := fmt.Sprintf("Stocks updated successfully.\n %d rows/record affected", updateRows)
-	res := response {
-		ID: int(id),
+	res := response{
+		ID:      int(id),
 		Message: msg,
 	}
 
@@ -111,14 +112,14 @@ func DeleteStock(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		log.Fatalf("Unable to convert string to int %v", err)
+		log.Fatalf("Unable to convert string to int %v\n", err)
 	}
 
 	deletedRows := deleteStock(int64(id))
 
 	msg := fmt.Sprintf("Stocks Deleted successfully.\n %d rows/records affected", deletedRows)
-	res := response {
-		ID: int(id),
+	res := response{
+		ID:      int(id),
 		Message: msg,
 	}
 

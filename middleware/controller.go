@@ -17,10 +17,10 @@ func insertStock(s models.Stock) int {
 
 	err := db.QueryRow(sqlSt, s.Name, s.Price, s.Company).Scan(&id)
 	if err != nil {
-		log.Fatalf("Unable to execute the Query. %v", err)
+		log.Fatalf("Unable to execute the Query. %v\n", err)
 	}
 
-	fmt.Printf("Inserted a Single Record %v", id)
+	fmt.Printf("Inserted a Single Record %v\n", id)
 	return id
 }
 
@@ -39,7 +39,7 @@ func getStock(id int64) (models.Stock, error) {
 	case nil:
 		return stock, nil
 	default:
-		log.Fatalf("Unable to scan the row %v", err)
+		log.Fatalf("Unable to scan the row %v\n", err)
 	}
 	return stock, err
 }
@@ -54,14 +54,14 @@ func getAllStocks() ([]models.Stock, error) {
 
 	rows, err := db.Query(sqlSt)
 	if err != nil {
-		log.Fatalf("Unable to execute the query %v", err)
+		log.Fatalf("Unable to execute the query %v\n", err)
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var stock models.Stock
 		err := rows.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
 		if err != nil {
-			log.Fatalf("Unable to scan the row %v", err)
+			log.Fatalf("Unable to scan the row %v\n", err)
 		}
 		stocks = append(stocks, stock)
 	}
@@ -76,13 +76,13 @@ func updateStock(id int64, s models.Stock) int {
 
 	res, err := db.Exec(sqlSt, id, s.Name, s.Price, s.Company)
 	if err != nil {
-		log.Fatalf("Unable to execute the query %v", err)
+		log.Fatalf("Unable to execute the query %v\n", err)
 	}
 	rowsAffected, err := res.RowsAffected()
 	if err != nil {
-		log.Fatalf("Error while checking affected row %v", err)
+		log.Fatalf("Error while checking affected row %v\n", err)
 	}
-	fmt.Printf("%v rows/records affected", rowsAffected)
+	fmt.Printf("%v rows/records affected \n", rowsAffected)
 	return int(rowsAffected)
 }
 
@@ -100,6 +100,6 @@ func deleteStock(id int64) int {
 	if err != nil {
 		log.Fatalf("Error while checking affected row %v", err)
 	}
-	fmt.Printf("%v rows/records affected", rowsAffected)
+	fmt.Printf("%v rows/records affected\n", rowsAffected)
 	return int(rowsAffected)
 }
