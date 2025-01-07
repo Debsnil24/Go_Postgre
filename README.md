@@ -7,7 +7,7 @@ This is a Golang project that uses a PostgreSQL backend server & REST API to man
 ## Roadmap
 
 ### Project Structure
-![ProjectStructure](https://github.com/user-attachments/assets/63e6608f-9dec-41bc-a399-aa1172365f13)
+![ProjectStructure](https://github.com/user-attachments/assets/21275597-f84d-4784-9ed1-6bd74cea9e09)
 
 ### Routes
 ![Routes](https://github.com/user-attachments/assets/b43ffd9f-91c2-426d-926b-e040174ed9cc)
